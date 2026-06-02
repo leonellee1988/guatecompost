@@ -1,0 +1,16 @@
+# Entorno virtual
+.venv/
+
+# Base de datos (datos reales del cliente, no van a GitHub)
+data/guatecompost.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# VSCode
+.vscode/
+
+# Sistema
+.DS_Store
