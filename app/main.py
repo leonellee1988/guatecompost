@@ -27,7 +27,7 @@ st.sidebar.markdown("---")
 
 pagina = st.sidebar.radio(
     "Navegación",
-    options=["Inicio", "Productos", "Clientes", "Proveedores", "Insumos", "Ventas"]
+    options=["Inicio", "Productos", "Clientes", "Proveedores", "Insumos", "Ventas", "Compras", "Gastos", 'Inventarios']
 )
 
 # ─── CONTENIDO POR PÁGINA ────────────────────────────────────
@@ -43,7 +43,7 @@ if pagina == "Inicio":
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.info("📦 **Productos**  \nCatálogo de productos disponibles")
+        st.info("📦 **Productos**  \nCatálogo de productos")
 
     with col2:
         st.info("👥 **Clientes**  \nGestión de clientes activos")
@@ -91,3 +91,15 @@ elif pagina == "Insumos":
 elif pagina == "Ventas":
     from pages import ventas
     ventas.mostrar()
+
+elif pagina == "Compras":
+    from pages import compras
+    compras.mostrar()
+
+elif pagina == "Gastos":
+    from pages import gastos
+    gastos.mostrar()
+
+elif pagina == "Inventarios":
+    from pages import inventarios
+    inventarios.mostrar()

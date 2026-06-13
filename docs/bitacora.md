@@ -91,3 +91,28 @@
   permite descuentos y negociación en tiempo real
 - Concepto aprendido: la indentación en Python ES la estructura —
   una sangría incorrecta cambia completamente el comportamiento
+
+  ### Sesión 7
+- Módulo compras.py creado de forma autónoma por Edwin siguiendo
+  patrón de ventas.py — cabecera/detalle con proveedor e insumos
+- Módulo gastos.py creado de forma autónoma por Edwin —
+  incluye campo descripcion en cabecera
+- Bug resuelto: insert_gasto() faltaba parámetro descripcion —
+  agregado al form de cabecera, session_state y llamada a la función
+- Funcionalidad agregada: desactivar registros en todos los módulos
+  maestros (producto, cliente, proveedor, insumo)
+- Funcionalidad agregada: eliminar venta completa con DELETE en
+  cascada — primero detalle, luego cabecera
+- Funcionalidad agregada: eliminar línea de detalle durante ingreso
+  usando list.pop(idx) sobre session_state — sin tocar la BD
+- Concepto aprendido: enumerate() para identificar índice de cada
+  ítem en una lista al renderizar botones por fila
+- Concepto aprendido: soft delete vs hard delete — tablas maestro
+  usan UPDATE activo=0, tablas transaccionales usan DELETE físico
+- Concepto aprendido: ALTER TABLE ADD COLUMN para modificar tablas
+  existentes sin perder datos — campo activo INTEGER DEFAULT 1
+- Mejora UX: unidad de medida visible al seleccionar producto/insumo
+  en ventas, compras y gastos
+- SQL actualizado: todas las funciones get_() filtran WHERE activo=1
+- Patrón de mensaje persistente con session_state consolidado en
+  todos los módulos

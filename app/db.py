@@ -173,3 +173,156 @@ def delete_venta_item(id_venta, id_producto):
             WHERE id_venta = ? AND id_producto = ?
         """, (id_venta, id_producto))
         conn.commit()
+
+# ─── COMPRAS ──────────────────────────────────────────────────
+
+def get_compras():
+    with get_connection() as conn:
+        return conn.execute("""
+            SELECT
+                cc.id_compra,
+                cc.fecha_compra,
+                p.nombre AS proveedor,
+                SUM(cd.cantidad * cd.costo_unitario) AS total
+            FROM compra_cabecera cc
+            JOIN proveedor p ON cc.id_proveedor = p.id_proveedor
+            JOIN compra_detalle cd ON cc.id_compra = cd.id_compra
+            GROUP BY cc.id_compra, cc.fecha_compra, p.nombre
+            ORDER BY cc.fecha_compra DESC
+        """).fetchall()
+
+def insert_compra(fecha, id_proveedor, detalle):
+    with get_connection() as conn:
+        cursor = conn.execute("""
+            INSERT INTO compra_cabecera (fecha_compra, id_proveedor)
+            VALUES (?, ?)
+        """, (fecha, id_proveedor))
+        id_compra = cursor.lastrowid
+        for item in detalle:
+            conn.execute("""
+                INSERT INTO compra_detalle
+                    (id_compra, id_producto, cantidad, costo_unitario)
+                VALUES (?, ?, ?, ?)
+            """, (id_compra, item['id_producto'],
+                  item['cantidad'], item['costo_unitario']))
+        conn.commit()
+
+def delete_compra(id_compra):
+    with get_connection() as conn:
+        conn.execute("DELETE FROM compra_detalle WHERE id_compra = ?", (id_compra,))
+        conn.execute("DELETE FROM compra_cabecera WHERE id_compra = ?", (id_compra,))
+        conn.commit()
+
+def delete_compra_item(id_compra, id_producto):
+    with get_connection() as conn:
+        conn.execute("""
+            DELETE FROM compra_detalle
+            WHERE id_compra = ? AND id_producto = ?
+        """, (id_compra, id_producto))
+        conn.commit()
+
+# ─── GASTOS OPERATIVOS ──────────────────────────────────────────────────
+
+def get_gastos():
+    with get_connection() as conn:
+        return conn.execute("""
+            SELECT
+                gc.id_gasto,
+                gc.fecha_gasto,
+                gc.descripcion,
+                p.nombre AS proveedor,
+                SUM(gd.cantidad * gd.costo_unitario) AS total
+            FROM gasto_cabecera gc
+            JOIN proveedor p ON gc.id_proveedor = p.id_proveedor
+            JOIN gasto_detalle gd ON gc.id_gasto = gd.id_gasto
+            GROUP BY gc.id_gasto, gc.fecha_gasto, p.nombre
+            ORDER BY gc.fecha_gasto DESC
+        """).fetchall()
+
+def insert_gasto(fecha, id_proveedor, descripcion, detalle):
+    with get_connection() as conn:
+        cursor = conn.execute("""
+            INSERT INTO gasto_cabecera (fecha_gasto, id_proveedor, descripcion)
+            VALUES (?, ?, ?)
+        """, (fecha, id_proveedor, descripcion))
+        id_gasto = cursor.lastrowid
+        for item in detalle:
+            conn.execute("""
+                INSERT INTO gasto_detalle
+                    (id_gasto, id_insumo, cantidad, costo_unitario)
+                VALUES (?, ?, ?, ?)
+            """, (id_gasto, item['id_insumo'],
+                  item['cantidad'], item['costo_unitario']))
+        conn.commit()
+
+def delete_gasto(id_gasto):
+    with get_connection() as conn:
+        conn.execute("DELETE FROM gasto_detalle WHERE id_gasto = ?", (id_gasto,))
+        conn.execute("DELETE FROM gasto_cabecera WHERE id_gasto = ?", (id_gasto,))
+        conn.commit()
+
+def delete_gasto_item(id_gasto, id_insumo):
+    with get_connection() as conn:
+        conn.execute("""
+            DELETE FROM gasto_detalle
+            WHERE id_gasto = ? AND id_insumo = ?
+        """, (id_gasto, id_insumo))
+        conn.commit()
+
+# ─── INVENTARIO ──────────────────────────────────────────────
+
+def get_stock_actual():
+    with get_connection() as conn:
+        return conn.execute("""
+            SELECT
+                p.id_producto,
+                p.nombre,
+                p.categoria,
+                p.unidad_medida,
+                p.costo,
+                COALESCE(ii.cantidad, 0)
+                    + COALESCE(SUM(DISTINCT cd.cantidad), 0)
+                    - COALESCE(SUM(DISTINCT vd.cantidad), 0) AS stock_actual,
+                (COALESCE(ii.cantidad, 0)
+                    + COALESCE(SUM(DISTINCT cd.cantidad), 0)
+                    - COALESCE(SUM(DISTINCT vd.cantidad), 0))
+                    * p.costo AS valorizacion
+            FROM producto p
+            LEFT JOIN inventario_inicial ii ON p.id_producto = ii.id_producto
+            LEFT JOIN compra_detalle cd     ON p.id_producto = cd.id_producto
+            LEFT JOIN venta_detalle vd      ON p.id_producto = vd.id_producto
+            WHERE p.activo = 1
+            GROUP BY p.id_producto, p.nombre, p.categoria,
+                     p.unidad_medida, p.costo, ii.cantidad
+            ORDER BY p.categoria, p.nombre
+        """).fetchall()
+
+def get_movimientos(id_producto):
+    with get_connection() as conn:
+        return conn.execute("""
+            SELECT
+                fecha_venta  AS fecha,
+                'Salida'     AS tipo,
+                p.nombre     AS producto,
+                vd.cantidad,
+                vd.precio_unitario AS precio_costo
+            FROM venta_detalle vd
+            JOIN venta_cabecera vc ON vd.id_venta    = vc.id_venta
+            JOIN producto p        ON vd.id_producto = p.id_producto
+            WHERE vd.id_producto = ?
+
+            UNION ALL
+
+            SELECT
+                fecha_compra AS fecha,
+                'Entrada'    AS tipo,
+                p.nombre     AS producto,
+                cd.cantidad,
+                cd.costo_unitario AS precio_costo
+            FROM compra_detalle cd
+            JOIN compra_cabecera cc ON cd.id_compra   = cc.id_compra
+            JOIN producto p         ON cd.id_producto = p.id_producto
+            WHERE cd.id_producto = ?
+
+            ORDER BY fecha DESC
+        """, (id_producto, id_producto)).fetchall()
