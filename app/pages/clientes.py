@@ -15,7 +15,9 @@ from db import get_clientes, insert_cliente, delete_cliente
 def mostrar():
 
     st.title("👥 Clientes")
-    st.markdown("---")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     if 'form_cliente_count' not in st.session_state:
         st.session_state['form_cliente_count'] = 0

@@ -16,7 +16,9 @@ from db import get_compras, get_proveedores, get_productos, insert_compra, delet
 def mostrar():
 
     st.title("🛒 Compras")
-    st.markdown("---")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     if 'form_compra_count' not in st.session_state:
         st.session_state['form_compra_count'] = 0

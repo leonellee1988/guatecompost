@@ -15,8 +15,10 @@ from db import get_gastos, get_proveedores, get_insumos, insert_gasto, delete_ga
 
 def mostrar():
 
-    st.title("🛍️ Insumos (Gastos)")
-    st.markdown("---")
+    st.title("🛍️ Gastos (compra de insumos)")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     if 'form_gasto_count' not in st.session_state:
         st.session_state['form_gasto_count'] = 0

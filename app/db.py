@@ -326,3 +326,19 @@ def get_movimientos(id_producto):
 
             ORDER BY fecha DESC
         """, (id_producto, id_producto)).fetchall()
+
+def get_stock_producto(id_producto):
+    with get_connection() as conn:
+        resultado = conn.execute("""
+            SELECT
+                COALESCE(ii.cantidad, 0)
+                    + COALESCE(SUM(DISTINCT cd.cantidad), 0)
+                    - COALESCE(SUM(DISTINCT vd.cantidad), 0) AS stock_actual
+            FROM producto p
+            LEFT JOIN inventario_inicial ii ON p.id_producto = ii.id_producto
+            LEFT JOIN compra_detalle cd     ON p.id_producto = cd.id_producto
+            LEFT JOIN venta_detalle vd      ON p.id_producto = vd.id_producto
+            WHERE p.id_producto = ?
+            GROUP BY p.id_producto, ii.cantidad
+        """, (id_producto,)).fetchone()
+        return resultado["stock_actual"] if resultado else 0.0

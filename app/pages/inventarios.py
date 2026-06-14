@@ -15,7 +15,9 @@ STOCK_MINIMO = 10  # Umbral provisional — definir con cliente
 def mostrar():
 
     st.title("📊 Inventarios")
-    st.markdown("---")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     tab1, tab2, tab3 = st.tabs([
         "📦 Stock Actual",

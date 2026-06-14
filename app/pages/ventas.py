@@ -9,14 +9,16 @@ import os
 from datetime import date
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from db import get_ventas, get_clientes, get_productos, insert_venta, delete_venta
+from db import get_ventas, get_clientes, get_productos, insert_venta, delete_venta, get_stock_producto
 
 # ─── FUNCIÓN PRINCIPAL ───────────────────────────────────────
 
 def mostrar():
 
     st.title("💰 Ventas")
-    st.markdown("---")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     if 'form_venta_count' not in st.session_state:
         st.session_state['form_venta_count'] = 0
@@ -110,8 +112,19 @@ def mostrar():
             if producto_preview != "— Seleccione un producto —":
                 precio_ref = float(opciones_productos[producto_preview]["precio"])
                 unidad     = opciones_productos[producto_preview]["unidad_medida"]
+                id_prev    = opciones_productos[producto_preview]["id"]
+                stock_disp = get_stock_producto(id_prev)
                 st.caption(f"💡 Precio sugerido del catálogo: Q{precio_ref:.2f}")
                 st.caption(f"📦 Unidad de medida: {unidad}")
+
+                # Alerta visual de stock
+                if stock_disp <= 0:
+                    st.error(f"🔴 Sin stock disponible para este producto.")
+                elif stock_disp < 10:
+                    st.warning(f"⚠️ Stock bajo: {round(stock_disp, 2)} {unidad} disponibles.")
+                else:
+                    st.success(f"🟢 Stock disponible: {round(stock_disp, 2)} {unidad}.")
+
             else:
                 precio_ref = 0.0
 
@@ -137,22 +150,36 @@ def mostrar():
                     if producto_preview == "— Seleccione un producto —":
                         st.error("Debe seleccionar un producto válido.")
                     else:
-                        id_producto = opciones_productos[producto_preview]["id"]
-                        ya_existe = any(
-                            i['id_producto'] == id_producto
-                            for i in st.session_state['venta_detalle']
+                        id_producto  = opciones_productos[producto_preview]["id"]
+                        stock_disp   = get_stock_producto(id_producto)
+
+                        # Validar stock suficiente
+                        ya_en_detalle = sum(
+                            i['cantidad'] for i in st.session_state['venta_detalle']
+                            if i['id_producto'] == id_producto
                         )
-                        if ya_existe:
-                            st.error(f"'{producto_preview}' ya está en el detalle.")
+
+                        if stock_disp <= 0:
+                            st.error(f"❌ No hay stock disponible para '{producto_preview}'.")
+                        elif cantidad > (stock_disp - ya_en_detalle):
+                            st.error(f"❌ Stock insuficiente. "
+                                    f"Disponible: {round(stock_disp - ya_en_detalle, 2)} unidades.")
                         else:
-                            st.session_state['venta_detalle'].append({
-                                'id_producto':     id_producto,
-                                'nombre':          producto_preview,
-                                'cantidad':        cantidad,
-                                'precio_unitario': precio
-                            })
-                            st.session_state['form_detalle_count'] += 1
-                            st.rerun()
+                            ya_existe = any(
+                                i['id_producto'] == id_producto
+                                for i in st.session_state['venta_detalle']
+                            )
+                            if ya_existe:
+                                st.error(f"'{producto_preview}' ya está en el detalle.")
+                            else:
+                                st.session_state['venta_detalle'].append({
+                                    'id_producto':     id_producto,
+                                    'nombre':          producto_preview,
+                                    'cantidad':        cantidad,
+                                    'precio_unitario': precio
+                                })
+                                st.session_state['form_detalle_count'] += 1
+                                st.rerun()
 
                 if guardar:
                     if not st.session_state['venta_detalle']:

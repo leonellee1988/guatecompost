@@ -14,8 +14,10 @@ from db import get_proveedores, insert_proveedor, delete_proveedor
 
 def mostrar():
 
-    st.title("🏷️ Proveedores")
-    st.markdown("---")
+    st.title("🚚 Proveedores")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     if 'form_proveedor_count' not in st.session_state:
         st.session_state['form_proveedor_count'] = 0

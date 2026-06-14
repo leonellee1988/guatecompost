@@ -15,7 +15,9 @@ from db import get_productos, insert_producto, delete_producto
 def mostrar():
 
     st.title("📦 Productos")
-    st.markdown("---")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     if 'form_producto_count' not in st.session_state:
         st.session_state['form_producto_count'] = 0

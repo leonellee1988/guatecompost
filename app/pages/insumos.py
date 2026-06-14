@@ -15,7 +15,9 @@ from db import get_insumos, insert_insumo, delete_insumo
 def mostrar():
 
     st.title("✏️ Insumos")
-    st.markdown("---")
+    st.markdown("""
+    <hr style='margin-top: 0.3rem;'>
+    """, unsafe_allow_html=True)
 
     if 'form_insumo_count' not in st.session_state:
         st.session_state['form_insumo_count'] = 0
