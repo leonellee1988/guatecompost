@@ -32,7 +32,6 @@ def mostrar():
 
         if not clientes:
             st.warning("No hay clientes registrados aún.")
-            return
 
         datos = []
         for c in clientes:

@@ -42,7 +42,6 @@ def mostrar():
 
         if not gastos:
             st.warning("No hay gastos registrados aún.")
-            return
 
         datos = []
         for g in gastos:

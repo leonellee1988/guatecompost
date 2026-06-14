@@ -32,7 +32,6 @@ def mostrar():
 
         if not productos:
             st.warning("No hay productos registrados aún.")
-            return
 
         datos = []
         for p in productos:

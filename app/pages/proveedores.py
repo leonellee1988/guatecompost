@@ -32,7 +32,6 @@ def mostrar():
 
         if not proveedores:
             st.warning("No hay proveedores registrados aún.")
-            return
 
         datos = []
         for p in proveedores:

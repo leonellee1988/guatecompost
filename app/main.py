@@ -21,7 +21,7 @@ st.markdown("""
     /* Reducir padding global del contenedor */
     .block-container {
         padding-top: 0.5rem !important;
-        padding-bottom: 0rem !important;
+        padding-bottom: 1rem !important;
         padding-left: 2rem !important;
         padding-right: 2rem !important;
     }

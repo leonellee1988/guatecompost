@@ -39,7 +39,6 @@ def mostrar():
 
         if not ventas:
             st.warning("No hay ventas registradas aún.")
-            return
 
         datos = []
         for v in ventas:

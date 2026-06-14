@@ -39,7 +39,6 @@ def mostrar():
 
         if not compras:
             st.warning("No hay compras registradas aún.")
-            return
 
         datos = []
         for c in compras:

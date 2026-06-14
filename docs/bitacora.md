@@ -116,3 +116,48 @@
 - SQL actualizado: todas las funciones get_() filtran WHERE activo=1
 - Patrón de mensaje persistente con session_state consolidado en
   todos los módulos
+
+  ### Sesión 8
+- Módulo inventarios.py creado: tres vistas — Stock Actual,
+  Movimientos y Valorización
+- Funciones agregadas en db.py: get_stock_actual() con cálculo
+  completo de stock e inventario_inicial + compras - ventas,
+  get_movimientos() con UNION ALL para entradas y salidas,
+  get_stock_producto() para validación en tiempo real
+- Concepto aprendido: UNION ALL — combina dos consultas en una
+  sola tabla de resultados sin eliminar duplicados
+- Concepto aprendido: st.metric — widget para KPIs con valor
+  grande, etiqueta y delta opcional
+- Validación de negocio agregada en ventas.py: alerta visual
+  de stock bajo/agotado al seleccionar producto, bloqueo de
+  venta si cantidad supera stock disponible
+- Concepto aprendido: validación en dos capas — visual
+  (Streamlit) y lógica (Python) antes de escribir en BD
+- Rediseño visual completo de main.py:
+  - CSS global: padding, header, paneles hover
+  - Paneles HTML con efecto hover — sin botones visibles
+  - Sidebar reorganizado con grupos: General, Maestros,
+    Transacciones, Inventario
+  - Función nav_button() creada — botón activo resaltado
+    en rojo con type="primary"
+  - Sección "Desarrollado por Edwin Lee Tiño" en sidebar
+- Decisión de marca: ERP renombrado a LEERP v1.0
+- Decisión estratégica: LEERP como producto comercializable
+  para micro y pequeñas empresas — modelo config.json por
+  cliente pendiente de implementar
+- Script sql/limpiar_bd.sql creado para resetear datos de
+  prueba — incluye limpieza de sqlite_sequence para reiniciar
+  IDs desde 1
+- Concepto aprendido: sqlite_sequence — tabla interna de
+  SQLite que controla los contadores de AUTOINCREMENT
+- Bug resuelto: return en tab1 cancelaba toda la función
+  mostrar() cuando la BD estaba vacía — eliminado en todos
+  los módulos maestros
+- Prueba integral completada con datos reales — sistema
+  estable y listo para siguiente fase
+
+### Pendiente próxima sesión
+- Conexión a Looker Studio para dashboards BI
+- Implementar config.json para personalización por cliente
+- Plan de SQL avanzado para perfil BI
+- Cositas menores detectadas en pruebas integrales

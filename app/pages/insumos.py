@@ -32,7 +32,6 @@ def mostrar():
 
         if not insumos:
             st.warning("No hay insumos registrados aún.")
-            return
 
         datos = []
         for i in insumos:

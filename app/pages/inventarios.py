@@ -35,7 +35,6 @@ def mostrar():
 
         if not stock:
             st.warning("No hay productos registrados.")
-            return
 
         # Métricas resumen
         total_productos  = len(stock)
@@ -77,7 +76,6 @@ def mostrar():
 
         if not productos:
             st.warning("No hay productos registrados.")
-            return
 
         opciones = {p["nombre"]: p["id_producto"] for p in productos}
 
