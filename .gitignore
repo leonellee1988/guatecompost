@@ -14,3 +14,6 @@ __pycache__/
 
 # Sistema
 .DS_Store
+
+# Credenciales Google Cloud
+config/credentials.json
