@@ -17,3 +17,6 @@ __pycache__/
 
 # Credenciales Google Cloud
 config/credentials.json
+
+# Variables de entorno
+.env

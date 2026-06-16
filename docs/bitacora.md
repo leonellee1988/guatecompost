@@ -156,8 +156,37 @@
 - Prueba integral completada con datos reales — sistema
   estable y listo para siguiente fase
 
+### Sesión 9
+- Conexión Google Sheets establecida exitosamente
+- APIs habilitadas en Google Cloud: Google Sheets API y Google Drive API
+- Cuenta de servicio creada: leerp-sheets@chrome-epigram-259923.iam.gserviceaccount.com
+- Credenciales JSON descargadas y almacenadas en config/credentials.json
+- config/credentials.json agregado al .gitignore — nunca sube a GitHub
+- Lección de seguridad: credenciales expuestas en chat → clave
+  eliminada y regenerada inmediatamente
+- Librerías instaladas: gspread, google-auth, pandas
+- Script exportar_sheets.py creado con 4 hojas: Ventas, Compras,
+  Stock y Gastos
+- Concepto aprendido: pd.read_sql_query() — ejecuta una consulta
+  SQL y devuelve un DataFrame de pandas listo para exportar
+- Google Sheet creado: "LEERP - Dashboard" compartido con la
+  cuenta de servicio como Editor
+- Módulo dashboard.py creado con botón de sincronización
+- Sincronización probada exitosamente — 4 hojas actualizadas
+  en Google Sheets desde el ERP con un solo clic
+- Datos de prueba v2 cargados: 10 productos, 5 clientes,
+  5 proveedores, 10 insumos, inventario inicial, 50 compras,
+  100 ventas, 20 gastos — período enero-junio 2026
+- Script sql/limpiar_bd.sql creado para resetear datos
+- Mockup del dashboard diseñado con pantone del portafolio
+  de Edwin: navy #0A1628, blue #0070C0, lblue #90CDF4
+- Decisión estratégica: guardar versión pre-dashboard en
+  GitHub antes de construir Looker Studio
+
 ### Pendiente próxima sesión
-- Conexión a Looker Studio para dashboards BI
-- Implementar config.json para personalización por cliente
+- Construir dashboard en Looker Studio
+- Conectar Google Sheets → Looker Studio
+- Crear visualizaciones: ventas por mes, por cliente,
+  margen por producto, stock y alertas
 - Plan de SQL avanzado para perfil BI
-- Cositas menores detectadas en pruebas integrales
+- Implementar config.json para personalización por cliente
