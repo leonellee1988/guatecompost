@@ -67,10 +67,10 @@ def mostrar():
             with col1:
                 nombre        = st.text_input("Nombre *", placeholder="Ej: Abono Orgánico Premium")
                 categoria     = st.selectbox("Categoría", options=[
-                    "Abono", "Foliar", "Compost", "Bioinsumo", "Fitosanitario", "Otro"
+                    "Jardín", "Agricultura", "Asesoría técnica", "Otro"
                 ])
                 unidad_medida = st.selectbox("Unidad de medida", options=[
-                    "Saco 25kg", "Saco 20kg", "Saco 10kg", "Kilo", "Litro", "Unidad"
+                   "4 onzas", "8 onzas", "1 libra", "10 libras", "1 quintal", "1 litro", "4 litros", "20 litros", "Hora", "Unidad"
                 ])
 
             with col2:
