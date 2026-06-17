@@ -183,10 +183,28 @@
 - Decisión estratégica: guardar versión pre-dashboard en
   GitHub antes de construir Looker Studio
 
-### Pendiente próxima sesión
-- Construir dashboard en Looker Studio
-- Conectar Google Sheets → Looker Studio
-- Crear visualizaciones: ventas por mes, por cliente,
-  margen por producto, stock y alertas
-- Plan de SQL avanzado para perfil BI
-- Implementar config.json para personalización por cliente
+### Sesión 10
+- Migración crítica: SQLite3 local → PostgreSQL en Neon (cloud)
+- db.py refactorizado: conexión con psycopg2 y variables de entorno
+- Archivo .env creado con credenciales de Neon
+- .env agregado a .gitignore — credenciales nunca van a GitHub
+- ERP desplegado en Streamlit Cloud — acceso desde cualquier
+  dispositivo y sistema operativo
+- Conexión directa Power BI → Neon PostgreSQL establecida
+  exitosamente — eliminando la dependencia de Google Sheets
+- Star Schema identificado como arquitectura correcta para
+  el modelo de datos en Power BI: tablas de hechos (ventas,
+  compras, gastos) + tablas de dimensión (fecha, producto,
+  cliente, proveedor)
+- Decisión: abandonar Google Sheets como intermediario —
+  Power BI se conecta directamente a PostgreSQL
+- Dashboard de ventas completado en Power BI con filtros
+  interactivos de fecha, producto y cliente
+- datos_prueba_v3.sql generado: 150 ventas, 60 compras,
+  24 gastos — período Ene-Dic 2025 con ventas > compras
+- Lección aprendida: el producto cartesiano en SQL causa
+  inflación de datos — siempre preagregar con CTEs antes
+  de hacer JOINs entre tablas de hechos diferentes
+- Lección aprendida: Looker Studio requiere tabla de fechas
+  y Star Schema para cruzar fuentes temporalmente —
+  igual que Power BI

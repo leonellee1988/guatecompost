@@ -95,7 +95,6 @@ nav_button("Gastos",   "btn_gastos")
 
 st.sidebar.markdown("##### 📊 Reportería")
 nav_button("Inventarios", "btn_inventarios")
-nav_button("Dashboard", "btn_dashboard")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
@@ -244,7 +243,3 @@ elif pagina == "Gastos":
 elif pagina == "Inventarios":
     from pages import inventarios
     inventarios.mostrar()
-
-elif pagina == "Dashboard":
-    from pages import dashboard
-    dashboard.mostrar()
